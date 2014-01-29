@@ -19,6 +19,10 @@ Include [jQuery](http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.j
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="jquery.panelslider.min.js"></script>
 
+[Bower](https://github.com/bower/bower) users can get the source with:
+
+    bower install jquery-panelslider
+
 # Usage
 
 **Opening**
