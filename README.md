@@ -1,3 +1,5 @@
+# Demo
+
 Side panel slider plugin (jQuery) that also slides page (inspired on medium).
 
 [Live demo](http://eduardomb.github.io/jquery-panelslider).
@@ -57,4 +59,5 @@ These are the supported options and their default values:
     }
 
 A call with no arguments is equivalent to:
+
     $('#my-panel').panelslider({side: 'left', duration: 200, clickClose: true });
