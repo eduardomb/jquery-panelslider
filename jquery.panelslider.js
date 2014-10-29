@@ -49,15 +49,20 @@
     $body.animate(bodyAnimation, options.duration);
     panel.show().animate(panelAnimation, options.duration, function() {
       _sliding = false;
+
+      if(typeof options.onOpen == 'function') {
+        options.onOpen();
+      }
     });
   }
 
   $.panelslider = function(element, options) {
     var active = $('.ps-active-panel');
     var defaults = {
-      side: 'left', // panel side: left or right
-      duration: 200, // Transition duration in miliseconds
-      clickClose: true // If true closes panel when clicking outside it
+      side: 'left',     // panel side: left or right
+      duration: 200,    // Transition duration in miliseconds
+      clickClose: true, // If true closes panel when clicking outside it
+      onOpen: null      // When supplied, function is called after the panel opens
     };
 
     options = $.extend({}, defaults, options);
