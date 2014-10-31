@@ -64,13 +64,14 @@ $.panelslider.close(callback);
 These are the supported options and their default values:
 ```javascript
 defaults = {
-  side: 'left',      // panel side: left or right
+  side: 'left',      // Panel side: left or right
   duration: 200,     // Transition duration in miliseconds
-  clickClose: true   // If true closes panel when clicking outside it
+  clickClose: true,  // If true closes panel when clicking outside it
+  onOpen: null       // When supplied, function is called after the panel opens
 }
 ```
 
 A call with no arguments is equivalent to:
 ```javascript
-$('#my-panel').panelslider({side: 'left', duration: 200, clickClose: true });
+$('#my-panel').panelslider({side: 'left', duration: 200, clickClose: true, onOpen: null });
 ```
