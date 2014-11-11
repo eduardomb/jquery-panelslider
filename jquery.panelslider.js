@@ -1,5 +1,5 @@
 /*
- * jQuery Panel Slider plugin v0.0.1
+ * jQuery Panel Slider plugin v0.1.1
  * https://github.com/eduardomb/jquery-panelslider
 */
 (function($) {
