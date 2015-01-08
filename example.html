@@ -51,6 +51,10 @@
     $('#close-panel-bt').click(function() {
       $.panelslider.close();
     });
+    
+    $('#left-panel').on('psBeforeOpen psOpen psBeforeClose psClose', function(evt){
+        console.log(evt.type, evt.target);
+    });
   </script>
 </body>
 </html>
