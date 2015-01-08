@@ -131,6 +131,10 @@
     $('#close-panel-bt').click(function() {
       $.panelslider.close();
     });
+
+    $('#left-panel, #right-panel').on('psBeforeOpen psOpen psBeforeClose psClose', function(e) {
+      console.log(e.type, e.target.getAttribute('id'));
+    });
   </script>
 </body>
 </html>

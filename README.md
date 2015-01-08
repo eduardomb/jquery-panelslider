@@ -89,6 +89,26 @@ Alternativaly, it's possible to close it manually. Because there can be only one
 $.panelslider.close(callback);
 ```
 
+**Events**
+
+The panel triggers few basic events:
+
+```javascript
+$('#my-panel')
+  .on('psOpen', function(e) {
+    console.log(e.type)
+  })
+  .on('psClose', function(e) {
+    console.log(e.type)
+  })
+  .on('psBeforeOpen', function(e) {
+    console.log(e.type)
+  })
+  .on('psBeforeClose', function(e) {
+    console.log(e.type)
+  });
+```
+
 # Options
 
 These are the supported options and their default values:

@@ -21,11 +21,15 @@
       return;
     }
 
+    $panel.trigger('psBeforeOpen');
+
     sliding = true;
 
     $panel.addClass('ps-active-panel');
     $('body').addClass(options.bodyClass).one(TRANSITION_END, function(e) {
       sliding = false;
+
+      $panel.trigger('psOpen');
 
       if (typeof options.onOpen == 'function') {
         options.onOpen();
@@ -45,11 +49,15 @@
       return;
     }
 
+    active.trigger('psBeforeClose');
+
     sliding = true;
 
     active.removeClass('ps-active-panel');
     $('body').removeClass(options.bodyClass).one(TRANSITION_END, function(e) {
       sliding = false;
+
+      active.trigger('psClose');
 
       if (callback) {
         // HACK: Prevent google chrome to invoke the callback prematurally.
@@ -61,7 +69,7 @@
   };
 
   // Bind click outside panel and ESC key to close panel if clickClose is true
-  $(document).bind('click keyup', function(e) {
+  $(document).on('click keyup', function(e) {
     var active = $('.ps-active-panel');
 
     if (e.type == 'keyup' && e.keyCode != 27) {
