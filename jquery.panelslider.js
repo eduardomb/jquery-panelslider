@@ -1,5 +1,5 @@
 /*
- * jQuery Panel Slider plugin v0.1.1
+ * jQuery Panel Slider plugin v0.2.0
  * https://github.com/eduardomb/jquery-panelslider
 */
 (function($) {
@@ -16,6 +16,8 @@
     if(panel.is(':visible') || _sliding) {
       return;
     }
+
+    panel.trigger('psBeforeOpen', [options]);
 
     _sliding = true;
     panel.addClass('ps-active-panel').css({
@@ -50,6 +52,7 @@
     panel.show().animate(panelAnimation, options.duration, function() {
       _sliding = false;
 
+      panel.trigger('psOpen', [options]);
       if(typeof options.onOpen == 'function') {
         options.onOpen();
       }
@@ -88,6 +91,8 @@
       return;
     }
 
+    active.trigger('psBeforeClose');
+
     _sliding = true;
 
     switch(active.data('side')) {
@@ -108,6 +113,7 @@
       active.removeClass('ps-active-panel');
       _sliding = false;
 
+      active.trigger('psClose');
       if(callback) {
         callback();
       }
@@ -115,7 +121,7 @@
   };
 
   // Bind click outside panel and ESC key to close panel if clickClose is true
-  $(document).bind('click keyup', function(e) {
+  $(document).on('click keyup', function(e) {
     var active = $('.ps-active-panel');
 
     if(e.type == 'keyup' && e.keyCode != 27) {
