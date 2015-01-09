@@ -1,0 +1,32 @@
+.ps-panel {
+    position: absolute;
+    top: 0px;
+    height: 100%;
+    z-index: 999999;
+    right: auto;
+    /*left: value has to be defined in custom.css*/
+    display: none;
+}
+
+.ps-panel[data-side=right] {
+    /*right: value has to be defined in custom.css*/
+    left: auto;
+}
+
+.ps-animated {
+    transition: margin-left .2s ease-in-out,
+                margin-right .2s ease-in-out, 
+                left .2s ease-in-out, 
+                right .2s ease-in-out;
+    -webkit-transition: margin-left .2s ease-in-out,
+                margin-right .2s ease-in-out, 
+                left .2s ease-in-out, 
+                right .2s ease-in-out;
+}
+.ps-panel.ps-animated {
+    display: block;
+}
+
+.ps-panel.ps-open {
+    display: block;
+}
