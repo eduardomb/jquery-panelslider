@@ -1,14 +1,19 @@
 /*
- * jQuery Panel Slider plugin v0.3.1
+ * jQuery Panel Slider plugin v0.3.2
  * https://github.com/eduardomb/jquery-panelslider
 */
-(function($) {
+(function(root) {
     'use strict';
+
+    var $ = root.jQuery || root.Zepto
+    ,   Modernizr = root.Modernizr
+    ,   transEndEventName // the prefixed transition end event
+    ;
 
     // These clases are added to the panel and body elements
     // to help customize the UI during and after animations:
-    var psOpenClass = 'ps-open'  // added after the panel is open
-    ,   psOpeningClass = 'ps-in' // added while the panel is opening
+    var psOpenClass = 'ps-open'   // added after the panel is open
+    ,   psOpeningClass = 'ps-in'  // added while the panel is opening
     ,   psClosingClass = 'ps-out' // added while the panel is closing
 
     ,   psActivePanelClass = 'ps-active-panel'
@@ -43,7 +48,7 @@
             panelAnimation = {},
             options = panel.data(),
             animate = options.animate && options.duration,
-            animated = options.animated && $.support.transition, // rely on transition.js from bootstrap
+            animated = options.animated && transEndEventName, // rely on transition.js from bootstrap
             $push = options.pushContainer || $body,
             $touchedElements = panel.add($push).add($body)
             ;
@@ -121,7 +126,7 @@
             $push.css(bodyAnimation);
             panel.css(panelAnimation);
             if ( animated ) {
-                panel.one(animated.end, next);
+                panel.one(transEndEventName, next);
             }
             else {
                 setTimeout(next,16);
@@ -139,7 +144,7 @@
             openClass = options.openClass,
             openBodyClass = options.openBodyClass || openClass,
             animate = options.animate && duration,
-            animated = options.animated && $.support.transition, // rely on transition.js from bootstrap
+            animated = options.animated && transEndEventName, // rely on transition.js from bootstrap
             $push = options.pushContainer || $body,
             $touchedElements = panel.add($push).add($body)
             ;
@@ -206,7 +211,7 @@
             $push.css(bodyAnimation);
 
             if ( animated ) {
-                panel.one(animated.end, next);
+                panel.one(transEndEventName, next);
             }
             else {
                 setTimeout(next,16);
@@ -310,5 +315,25 @@
 
     return this;
   };
+
+  // Rely on Modernizr or any other library to set $.support.transition.end to the right 
+  // transitionend event name:
+  if ( Modernizr && Modernizr.csstransitions ) {
+    if ( !('transition' in $.support) ) $.support.transition = {};
+    // Eg. Twitter Bootstrap (transition.js) could have been set $.support.transition.end to the right value
+    if ( !$.support.transition.end ) {
+        $.support.transition.end = {
+            'WebkitTransition' : 'webkitTransitionEnd'
+          , 'OTransition'      : 'oTransitionEnd'
+          , 'msTransition'     : 'MSTransitionEnd'
+          // , 'MozTransition'    : 'transitionend'
+          // , 'transition'       : 'transitionend'
+        }[ Modernizr.prefixed( 'transition' ) ] || 'transitionend';
+    }
+  }
+
+  // Use the prefixed transitionend event name
+  (transEndEventName = $.support.transition) && (transEndEventName = transEndEventName.end);
+
 }
-(jQuery));
+(this));
