@@ -1,5 +1,5 @@
 /*
- * jQuery Panel Slider plugin v0.3.2
+ * jQuery Panel Slider plugin v0.3.3
  * https://github.com/eduardomb/jquery-panelslider
 */
 (function(root) {
@@ -222,7 +222,7 @@
     function _psInit(element, options) {
         var _options = element.data();
         if ( !_options.psInited ) {
-            _options = $.extend({}, $.panelslider.defaults, _options, options);
+            _options = $.extend({}, $.panelslider.defaults, options, _options);
 
             var $push = _options.pushContainer ? $(_options.pushContainer) : $body;
 
@@ -275,17 +275,24 @@
     .on('click keyup', function(evt) {
         var panel = $(dotActivePanelClass);
 
-        if(evt.type == 'keyup' && evt.keyCode != 27) {
+        if ( evt.type == 'keyup' && evt.keyCode != 27 ) {
             return;
         }
 
-        if(isOpen(panel) && panel.data('clickClose')) {
+        if ( isOpen(panel) && panel.data('clickClose') ) {
+          _slideOut();
+        }
+    })
+
+    .on('dblclick', function (evt) {
+        var panel = $(dotActivePanelClass);
+        if ( isOpen(panel) ) {
           _slideOut();
         }
     })
 
     // Prevent click on panel to close it
-    .on('click', dotActivePanelClass, function(evt) {
+    .on('click dblclick', dotActivePanelClass, function(evt) {
         evt.stopPropagation();
     })
   ;
@@ -316,7 +323,7 @@
     return this;
   };
 
-  // Rely on Modernizr or any other library to set $.support.transition.end to the right 
+  // Rely on Modernizr or any other library to set $.support.transition.end to the right
   // transitionend event name:
   if ( Modernizr && Modernizr.csstransitions ) {
     if ( !('transition' in $.support) ) $.support.transition = {};
