@@ -1,7 +1,7 @@
-/*
+/**
  * jQuery Panel Slider plugin v0.3.3
  * https://github.com/eduardomb/jquery-panelslider
-*/
+ */
 (function(root) {
     'use strict';
 
