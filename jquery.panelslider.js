@@ -82,7 +82,7 @@
               left: 'auto',
               right: '-' + panelWidth + 'px'
             });
-            bodyAnimation['margin-right'] = '+=' + panelWidth;
+            bodyAnimation['margin-left'] = '-=' + panelWidth;
             panelAnimation.right = '+=' + panelWidth;
             break;
         }
@@ -171,7 +171,7 @@
             break;
 
           case 'right':
-            bodyAnimation['margin-right'] = '-=' + panelWidth;
+            bodyAnimation['margin-left'] = '+=' + panelWidth;
             panelAnimation.right = '-=' + panelWidth;
             break;
         }
