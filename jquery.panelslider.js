@@ -33,7 +33,6 @@
         }
     ;
 
-
     var $body = $('body')
     ,   _sliding = false
     ;
@@ -50,7 +49,8 @@
             animate = options.animate && options.duration,
             animated = options.animated && transEndEventName, // rely on transition.js from bootstrap
             $push = options.pushContainer || $body,
-            $touchedElements = panel.add($push).add($body)
+            $touchedElements = panel.add($push).add($body),
+            pushIsStatic = $push.css('position') == 'static'
             ;
 
         if(isOpen(panel) || _sliding) {
@@ -73,7 +73,17 @@
               left: '-' + panelWidth + 'px',
               right: 'auto'
             });
-            bodyAnimation['margin-left'] = '+=' + panelWidth;
+            if ( pushIsStatic ) {
+                bodyAnimation['margin-left'] = '+=' + panelWidth;
+            }
+            else {
+                if ( $push.css('left') == 'auto' ) {
+                    bodyAnimation['right'] = '-=' + panelWidth;
+                }
+                else {
+                    bodyAnimation['left'] = '+=' + panelWidth;
+                }
+            }
             panelAnimation.left = '+=' + panelWidth;
             break;
 
@@ -82,7 +92,17 @@
               left: 'auto',
               right: '-' + panelWidth + 'px'
             });
-            bodyAnimation['margin-left'] = '-=' + panelWidth;
+            if ( pushIsStatic ) {
+                bodyAnimation['margin-left'] = '-=' + panelWidth;
+            }
+            else {
+                if ( $push.css('right') == 'auto' ) {
+                    bodyAnimation['left'] = '-=' + panelWidth;
+                }
+                else {
+                    bodyAnimation['right'] = '+=' + panelWidth;
+                }
+            }
             panelAnimation.right = '+=' + panelWidth;
             break;
         }
@@ -146,7 +166,8 @@
             animate = options.animate && duration,
             animated = options.animated && transEndEventName, // rely on transition.js from bootstrap
             $push = options.pushContainer || $body,
-            $touchedElements = panel.add($push).add($body)
+            $touchedElements = panel.add($push).add($body),
+            pushIsStatic = $push.css('position') == 'static'
             ;
 
         if(!panel.length || !isOpen(panel) || _sliding) {
@@ -166,12 +187,32 @@
 
         switch(panel.data('side')) {
           case 'left':
-            bodyAnimation['margin-left'] = '-=' + panelWidth;
+            if ( pushIsStatic ) {
+                bodyAnimation['margin-left'] = '-=' + panelWidth;
+            }
+            else {
+                if ( $push.css('left') == 'auto' ) {
+                    bodyAnimation['right'] = '+=' + panelWidth;
+                }
+                else {
+                    bodyAnimation['left'] = '-=' + panelWidth;
+                }
+            }
             panelAnimation.left = '-=' + panelWidth;
             break;
 
           case 'right':
-            bodyAnimation['margin-left'] = '+=' + panelWidth;
+            if ( pushIsStatic ) {
+                bodyAnimation['margin-left'] = '+=' + panelWidth;
+            }
+            else {
+                if ( $push.css('right') == 'auto' ) {
+                    bodyAnimation['left'] = '+=' + panelWidth;
+                }
+                else {
+                    bodyAnimation['right'] = '-=' + panelWidth;
+                }
+            }
             panelAnimation.right = '-=' + panelWidth;
             break;
         }
