@@ -42,11 +42,17 @@
     <button id="close-panel-bt">Close</button>
   </div>
 
+  <!-- Load jQuery from Google CDN -->
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  
+  <!-- Only required if you choose to use jQuery Easing animations -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+  
+  <!-- Load Panelslider -->
   <script src="jquery.panelslider.min.js"></script>
   <script>
     $('#left-panel-link').panelslider();
-    $('#right-panel-link').panelslider({side: 'right', clickClose: false, duration: 200 });
+    $('#right-panel-link').panelslider({side: 'right', clickClose: false, duration: 600, easingOpen: 'easeInBack', easingClose: 'easeOutBack'});
 
     $('#close-panel-bt').click(function() {
       $.panelslider.close();

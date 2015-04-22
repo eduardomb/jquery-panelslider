@@ -29,7 +29,9 @@
             animate: true,                // if false, no animations are used
             animated: false,              // bool, same effect as if .animatedClass is present
             pushContainer: null,          // what to push? defaulst to body
-            onOpen: null                  // When supplied, function is called after the panel opens
+            onOpen: null,                 // When supplied, function is called after the panel opens
+            easingOpen: null, // Easing method for opening, requires jQuery Easing Plugin 1.3
+            easingClose: null // Easing method for opening, requires jQuery Easing Plugin 1.3
         }
     ;
 
@@ -139,8 +141,8 @@
         }
 
         if ( animate ) {
-            $push.animate(bodyAnimation, options.duration);
-            panel.animate(panelAnimation, options.duration, next);
+            $push.animate(bodyAnimation, options.duration, options.easingOpen);
+            panel.animate(panelAnimation, options.duration, options.easingOpen, next);
         }
         else {
             $push.css(bodyAnimation);
@@ -156,11 +158,12 @@
 
     function _slideOut(callback) {
         var panel = $(dotActivePanelClass),
-            duration = panel.data('duration'),
             panelWidth = panel.outerWidth(true),
             bodyAnimation = {},
             panelAnimation = {},
             options = panel.data(),
+            duration = options.duration,
+            easingClose = options.easingClose,
             openClass = options.openClass,
             openBodyClass = options.openBodyClass || openClass,
             animate = options.animate && duration,
@@ -244,8 +247,8 @@
         ;
 
         if ( animate ) {
-            panel.animate(panelAnimation, duration);
-            $push.animate(bodyAnimation, duration, next);
+            panel.animate(panelAnimation, duration, easingClose);
+            $push.animate(bodyAnimation, duration, easingClose, next);
         }
         else {
             panel.css(panelAnimation);

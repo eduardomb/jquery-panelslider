@@ -84,14 +84,16 @@ $('#my-panel')
 These are the supported options and their default values:
 ```javascript
 defaults = {
-  side: 'left',      // Panel side: left or right
-  duration: 200,     // Transition duration in miliseconds
-  clickClose: true,  // If true closes panel when clicking outside it
-  onOpen: null       // When supplied, function is called after the panel opens
+  side: 'left',       // Panel side: left or right
+  duration: 200,      // Transition duration in miliseconds
+  clickClose: true,   // If true closes panel when clicking outside it
+  onOpen: null,       // Optional: Function is called after the panel opens
+  easingOpen: null,   // Optional: Opening animation (requires [jQuery Easing Plugin 1.3](http://gsgd.co.uk/sandbox/jquery/easing/))
+  easingOpen: null    // Optional: Closing animation (requires [jQuery Easing Plugin 1.3](http://gsgd.co.uk/sandbox/jquery/easing/))
 }
 ```
 
 A call with no arguments is equivalent to:
 ```javascript
-$('#my-link').panelslider({side: 'left', duration: 200, clickClose: true, onOpen: null });
+$('#my-link').panelslider({side: 'left', duration: 200, clickClose: true, onOpen: null, easingOpen: null, easingClose: null });
 ```
