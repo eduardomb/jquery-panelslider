@@ -1,5 +1,5 @@
 /*
- * jQuery Panel Slider plugin v0.1.1
+ * jQuery Panel Slider plugin v0.1.2
  * https://github.com/eduardomb/jquery-panelslider
 */
 (function($) {
@@ -18,6 +18,7 @@
     }
 
     _sliding = true;
+    $body.addClass('ps-active');
     panel.addClass('ps-active-panel').css({
       position: 'fixed',
       top: 0,
@@ -111,7 +112,7 @@
       if(callback) {
         callback();
       }
-    });
+    }).removeClass('ps-active');
   };
 
   // Bind click outside panel and ESC key to close panel if clickClose is true
