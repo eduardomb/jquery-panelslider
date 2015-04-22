@@ -1,5 +1,5 @@
 /*
- * jQuery Panel Slider plugin v0.1.1
+ * jQuery Panel Slider plugin v0.1.2
  * https://github.com/eduardomb/jquery-panelslider
 */
 (function($) {
@@ -46,8 +46,8 @@
         break;
     }
 
-    $body.animate(bodyAnimation, options.duration);
-    panel.show().animate(panelAnimation, options.duration, function() {
+    $body.animate(bodyAnimation, options.duration, options.easingOpen);
+    panel.show().animate(panelAnimation, options.duration, options.easingOpen, function() {
       _sliding = false;
 
       if(typeof options.onOpen == 'function') {
@@ -62,11 +62,12 @@
       side: 'left',     // panel side: left or right
       duration: 200,    // Transition duration in miliseconds
       clickClose: true, // If true closes panel when clicking outside it
-      onOpen: null      // When supplied, function is called after the panel opens
+      onOpen: null,     // When supplied, function is called after the panel opens
+      easingOpen: null, // Easing method for opening, requires jQuery Easing Plugin 1.3
+      easingClose: null // Easing method for opening, requires jQuery Easing Plugin 1.3
     };
 
     options = $.extend({}, defaults, options);
-
     // If another panel is opened, close it before opening the new one
     if(active.is(':visible') && active[0] != element[0]) {
       $.panelslider.close(function() {
@@ -82,7 +83,8 @@
         duration = active.data('duration'),
         panelWidth = active.outerWidth(true),
         bodyAnimation = {},
-        panelAnimation = {};
+        panelAnimation = {},
+        easingClose = active.data('easingClose');
 
     if(!active.length || active.is(':hidden') || _sliding) {
       return;
@@ -101,9 +103,8 @@
         panelAnimation.right = '-=' + panelWidth;
         break;
     }
-
-    active.animate(panelAnimation, duration);
-    $body.animate(bodyAnimation, duration, function() {
+    active.animate(panelAnimation, duration, easingClose);
+    $body.animate(bodyAnimation, duration, easingClose, function() {
       active.hide();
       active.removeClass('ps-active-panel');
       _sliding = false;
