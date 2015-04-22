@@ -41,12 +41,12 @@ Create an element with the panel content and a link to it.
 
 and then invoke `panelslider()` on the element.
 ```javascript
-$('#my-panel').panelslider();
+$('#my-link').panelslider();
 ```
 
 You can also invoke `panelslider()` directly
 ```javascript
-$.panelslider($('#my-panel'));
+$.panelslider($('#my-link'));
 ```
 
 **Closing**
@@ -73,5 +73,5 @@ defaults = {
 
 A call with no arguments is equivalent to:
 ```javascript
-$('#my-panel').panelslider({side: 'left', duration: 200, clickClose: true, onOpen: null });
+$('#my-link').panelslider({side: 'left', duration: 200, clickClose: true, onOpen: null });
 ```
