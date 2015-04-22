@@ -5,21 +5,21 @@
 (function(root) {
     'use strict';
 
-    var $ = root.jQuery || root.Zepto
-    ,   Modernizr = root.Modernizr
-    ,   transEndEventName // the prefixed transition end event
-    ;
+    var $ = root.jQuery || root.Zepto,
+        Modernizr = root.Modernizr,
+        transEndEventName; // the prefixed transition end event
+
 
     // These clases are added to the panel and body elements
     // to help customize the UI during and after animations:
-    var psOpenClass = 'ps-open'   // added after the panel is open
-    ,   psOpeningClass = 'ps-in'  // added while the panel is opening
-    ,   psClosingClass = 'ps-out' // added while the panel is closing
+    var psOpenClass = 'ps-open',   // added after the panel is open
+        psOpeningClass = 'ps-in',  // added while the panel is opening
+        psClosingClass = 'ps-out', // added while the panel is closing
 
-    ,   psActivePanelClass = 'ps-active-panel'
-    ,   dotActivePanelClass = '.' + psActivePanelClass
+        psActivePanelClass = 'ps-active-panel',
+        dotActivePanelClass = '.' + psActivePanelClass,
 
-    ,   defaults = {
+        defaults = {
             side: 'left',                 // panel side: left or right
             duration: 200,                // Transition duration in miliseconds
             clickClose: true,             // If true closes panel when clicking outside it
@@ -32,12 +32,10 @@
             onOpen: null,                 // When supplied, function is called after the panel opens
             easingOpen: null, // Easing method for opening, requires jQuery Easing Plugin 1.3
             easingClose: null // Easing method for opening, requires jQuery Easing Plugin 1.3
-        }
-    ;
+        };
 
-    var $body = $('body')
-    ,   _sliding = false
-    ;
+    var $body = $('body'),
+        _sliding = false;
 
     function isOpen(panel, options) {
         return panel.length && ( panel.hasClass(psActivePanelClass) );
