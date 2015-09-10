@@ -1,116 +1,61 @@
 /*
- * jQuery Panel Slider plugin v0.1.2
+ * jQuery Panel Slider plugin v1.0.0
  * https://github.com/eduardomb/jquery-panelslider
 */
 (function($) {
   'use strict';
 
-  var $body = $('body'),
-      _sliding = false;
+  var TRANSITION_END = [
+    'transitionend',
+    'webkitTransitionEnd',
+    'oTransitionEnd',
+    'MSTransitionEnd'
+  ].join(' ');
 
-  function _slideIn(panel, options) {
-    var panelWidth = panel.outerWidth(true),
-        bodyAnimation = {},
-        panelAnimation = {};
+  var sliding = false;
 
-    if(panel.is(':visible') || _sliding) {
+  function _slideIn($panel) {
+    var options = $panel.data('ps-options');
+
+    if ($('body').hasClass(options.bodyClass) || sliding) {
       return;
     }
 
-    _sliding = true;
-    panel.addClass('ps-active-panel').css({
-      position: 'fixed',
-      top: 0,
-      height: '100%',
-      'z-index': 999999
-    });
-    panel.data(options);
+    sliding = true;
 
-    switch (options.side) {
-      case 'left':
-        panel.css({
-          left: '-' + panelWidth + 'px',
-          right: 'auto'
-        });
-        bodyAnimation['margin-left'] = '+=' + panelWidth;
-        panelAnimation.left = '+=' + panelWidth;
-        break;
+    $panel.addClass('ps-active-panel');
+    $('body').addClass(options.bodyClass).one(TRANSITION_END, function(e) {
+      sliding = false;
 
-      case 'right':
-        panel.css({
-          left: 'auto',
-          right: '-' + panelWidth + 'px'
-        });
-        bodyAnimation['margin-left'] = '-=' + panelWidth;
-        panelAnimation.right = '+=' + panelWidth;
-        break;
-    }
-
-    $body.animate(bodyAnimation, options.duration, options.easingOpen);
-    panel.show().animate(panelAnimation, options.duration, options.easingOpen, function() {
-      _sliding = false;
-
-      if(typeof options.onOpen == 'function') {
+      if (typeof options.onOpen == 'function') {
         options.onOpen();
       }
     });
   }
 
   $.panelslider = function(element, options) {
-    var active = $('.ps-active-panel');
-    var defaults = {
-      side: 'left',     // panel side: left or right
-      duration: 200,    // Transition duration in miliseconds
-      clickClose: true, // If true closes panel when clicking outside it
-      onOpen: null,     // When supplied, function is called after the panel opens
-      easingOpen: null, // Easing method for opening, requires jQuery Easing Plugin 1.3
-      easingClose: null // Easing method for opening, requires jQuery Easing Plugin 1.3
-    };
-
-    options = $.extend({}, defaults, options);
-    // If another panel is opened, close it before opening the new one
-    if(active.is(':visible') && active[0] != element[0]) {
-      $.panelslider.close(function() {
-        _slideIn(element, options);
-      });
-    } else if(!active.length || active.is(':hidden')) {
-      _slideIn(element, options);
-    }
+    element.panelslider(options);
   };
 
   $.panelslider.close = function(callback) {
     var active = $('.ps-active-panel'),
-        duration = active.data('duration'),
-        panelWidth = active.outerWidth(true),
-        bodyAnimation = {},
-        panelAnimation = {},
-        easingClose = active.data('easingClose');
+        options = active.data('ps-options');
 
-    if(!active.length || active.is(':hidden') || _sliding) {
+    if (!active.length || sliding) {
       return;
     }
 
-    _sliding = true;
+    sliding = true;
 
-    switch(active.data('side')) {
-      case 'left':
-        bodyAnimation['margin-left'] = '-=' + panelWidth;
-        panelAnimation.left = '-=' + panelWidth;
-        break;
+    active.removeClass('ps-active-panel');
+    $('body').removeClass(options.bodyClass).one(TRANSITION_END, function(e) {
+      sliding = false;
 
-      case 'right':
-        bodyAnimation['margin-left'] = '+=' + panelWidth;
-        panelAnimation.right = '-=' + panelWidth;
-        break;
-    }
-    active.animate(panelAnimation, duration, easingClose);
-    $body.animate(bodyAnimation, duration, easingClose, function() {
-      active.hide();
-      active.removeClass('ps-active-panel');
-      _sliding = false;
-
-      if(callback) {
-        callback();
+      if (callback) {
+        // HACK: Prevent google chrome to invoke the callback prematurally.
+        setTimeout(function() {
+          callback();
+        }, 0);
       }
     });
   };
@@ -119,11 +64,11 @@
   $(document).bind('click keyup', function(e) {
     var active = $('.ps-active-panel');
 
-    if(e.type == 'keyup' && e.keyCode != 27) {
+    if (e.type == 'keyup' && e.keyCode != 27) {
       return;
     }
 
-    if(active.is(':visible') && active.data('clickClose')) {
+    if (active.length && active.data('ps-options').clickClose) {
       $.panelslider.close();
     }
   });
@@ -134,15 +79,31 @@
   });
 
   $.fn.panelslider = function(options) {
-    this.click(function(e) {
-      var active = $('.ps-active-panel'),
-          panel = $(this.getAttribute('href'));
+    var defaults = {
+      bodyClass: 'ps-active', // Class to be added to body when panel is opened
+      clickClose: true,       // If true closes panel when clicking outside it
+      onOpen: null            // Callback after the panel opens
+    };
+    var $panel = $(this.attr('href'));
 
-      // Close panel if it is already opened otherwise open it
-      if (active.is(':visible') && panel[0] == active[0]) {
+    $panel.data('ps-options', $.extend({}, defaults, options));
+
+    this.click(function(e) {
+      var active = $('.ps-active-panel');
+
+      // Open if no panel is active.
+      if (!active.length) {
+        _slideIn($panel);
+
+      // Closes if the target panel is active.
+      } else if (active[0] == $panel[0]) {
         $.panelslider.close();
+
+      // If another panel is active, close it before opening the target.
       } else {
-        $.panelslider(panel, options);
+        $.panelslider.close(function() {
+          _slideIn($panel);
+        });
       }
 
       e.preventDefault();
